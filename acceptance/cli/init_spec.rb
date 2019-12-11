@@ -13,7 +13,7 @@ describe "vagrant CLI: init", component: "cli/init" do
     vagrantfile = environment.workdir.join("Vagrantfile")
 
     assert_execute("vagrant", "init", "foo")
-    vagrantfile.read.should match(/config.vm.box = "foo"$/)
+    expect(vagrantfile.read).to match(/config.vm.box = "foo"$/)
   end
 
   it "creates a Vagrantfile with the box URL set to the given argument" do

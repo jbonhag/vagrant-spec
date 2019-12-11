@@ -1,0 +1,661 @@
+Execute: vagrant box list
+.Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+Execute: vagrant box list
+.Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+.Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+Execute: vagrant box add --force foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+.Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box --provider empty_provider
+Execute: vagrant box list
+.Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+Execute: vagrant box add --force --provider empty_provider foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box
+.Execute: vagrant box add foo /Users/jeff/hashicorp/vagrant-spec/acceptance/support-boxes/empty.box --provider wrong
+.Execute: vagrant box add http://127.0.0.1:3838/vagrant20191210-823-ts6oqf.json
+.Execute: vagrant box add http://127.0.0.1:3838/vagrant20191210-823-15p3zsd.json
+Execute: vagrant box outdated --global
+.Execute: vagrant box add http://127.0.0.1:3838/vagrant20191210-823-1j1bcok.json
+Execute: vagrant box add --box-version = 0.5 http://127.0.0.1:3838/vagrant20191210-823-1j1bcok.json
+Execute: vagrant box outdated --global
+.Execute: vagrant box add http://127.0.0.1:3838/vagrant20191210-823-1ocfjx4.json
+Execute: vagrant box outdated --global
+.Execute: vagrant init
+.Execute: vagrant init foo
+.Execute: vagrant init foo bar
+.Execute: vagrant init --output foo
+.Execute: vagrant init --output -
+.Execute: vagrant plugin list
+.Test: plugin installation
+Execute: vagrant plugin install /Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem
+FTest: plugin installation
+Execute: vagrant plugin install /Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem /Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-rename-0.1.0.gem
+FExecute: vagrant plugin install vagrant-spec-nope-1576031581
+.Execute: vagrant plugin install vagrant-spec-helper-basic
+FExecute: vagrant plugin install vagrant-spec-helper-basic --plugin-version 0.1.0
+FTest: install low version of plugin
+Execute: vagrant plugin install vagrant-spec-helper-basic --plugin-version 0.1.0
+FExecute: vagrant plugin install /Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem
+FExecute: vagrant plugin install /Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem
+FExecute: vagrant plugin install /Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem
+FExecute: vagrant plugin install nokogiri
+FExecute: vagrant -v
+.Execute: vagrant --version
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant init box
+Execute: vagrant up --provider=virtualbox
+Test: machine is running after up
+Execute: vagrant ssh -c echo foo
+Test: suspend
+Execute: vagrant suspend
+Test: ssh doesn't work during suspended state
+Execute: vagrant ssh -c echo foo
+Test: resume after suspend
+Execute: vagrant resume
+Execute: vagrant ssh -c echo foo
+Test: halt
+Execute: vagrant halt
+Test: ssh doesn't work during halted state
+Execute: vagrant ssh -c echo foo
+Test: up after halt
+Execute: vagrant up
+Execute: vagrant ssh -c echo foo
+Execute: vagrant destroy --force
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Test: TCP forwarded port (default)
+Execute: vagrant ssh -c python -m SimpleHTTPServer 8080
+Execute: vagrant destroy --force
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Test: static IP
+Execute: vagrant ssh -c python -m SimpleHTTPServer 9268
+Execute: vagrant destroy --force
+.Execute: vagrant package
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant init box
+Execute: vagrant up --provider=virtualbox
+Execute: vagrant package
+Execute: vagrant destroy --force
+Testing that we can re-use the packaged box
+Execute: vagrant box add temp /var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-1c05aj0/work/package.box
+Execute: vagrant init temp
+Execute: vagrant up --provider=virtualbox
+Testing we can re-package again (GH-5780)
+Execute: vagrant package
+Execute: vagrant destroy --force
+Execute: vagrant box add temp /var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-1grhslh/work/package.box
+Execute: vagrant init temp
+Execute: vagrant up --provider=virtualbox
+Execute: vagrant destroy --force
+.Execute: vagrant box add basic /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Test: mounts the default /vagrant synced folder
+Execute: vagrant ssh -c cat /vagrant/foo
+Test: doesn't mount a disabled folder
+Execute: vagrant ssh -c test -d /foo
+Execute: vagrant destroy --force
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Execute: vagrant destroy --force
+FExecute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Test: installs docker
+Execute: vagrant ssh -c which docker
+Execute: vagrant destroy --force
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Execute: vagrant destroy --force
+FExecute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Test: inline script
+Execute: vagrant ssh -c cat /foo
+Test: script from path
+Execute: vagrant ssh -c cat /vagrant-path
+Test: script with args
+Execute: vagrant ssh -c cat /vagrant-args
+Test: privileged scripts
+Execute: vagrant ssh -c cat /tmp/vagrant-user-root
+Test: non-privileged scripts
+Execute: vagrant ssh -c cat /tmp/vagrant-user
+Execute: vagrant destroy --force
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Execute: vagrant destroy --force
+FExecute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+Test: does initial rsync sync
+Execute: vagrant ssh -c cat /vagrant-rsync/foo
+Test: doesn't mount a disabled folder
+Execute: vagrant ssh -c test -d /foo
+Test: syncs changes when requested
+Execute: vagrant rsync
+Execute: vagrant ssh -c cat /vagrant-rsync/bar
+Execute: vagrant destroy --force
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up machine-box --provider=virtualbox
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up machine-box --provider=virtualbox
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up machine-box --provider=virtualbox
+Execute: vagrant destroy machine-box -f
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up spec-box --provider=virtualbox
+Execute: vagrant up machine-box --provider=virtualbox
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant up --provider=virtualbox
+.Execute: vagrant box add box /Users/jeff/Downloads/ubuntu-18.04.box
+Execute: vagrant destroy -f
+.
+
+Failures:
+
+  1) vagrant CLI: plugin has certain behavior with a plugin installed
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the '/Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:18:in `block (2 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  2) vagrant CLI: plugin can install and uninstall multiple plugins
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the '/Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:52:in `block (2 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  3) vagrant CLI: plugin plugin install succeeds with a remote plugin
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the 'vagrant-spec-helper-basic' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:88:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  4) vagrant CLI: plugin plugin install can install a specific version of a plugin
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the 'vagrant-spec-helper-basic --version '0.1.0'' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:96:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  5) vagrant CLI: plugin plugin update can update a plugin
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the 'vagrant-spec-helper-basic --version '0.1.0'' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:108:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  6) vagrant CLI: plugin plugin license fails with a license file that doesn't exist
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the '/Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:131:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  7) vagrant CLI: plugin plugin license fails with a plugin that isn't installed
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the '/Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:131:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  8) vagrant CLI: plugin plugin license succeeds with a valid gem and license
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the '/Users/jeff/hashicorp/vagrant-spec/acceptance/support-plugins/vagrant-spec-helper-basic-0.1.0.gem' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:131:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  9) vagrant CLI: plugin plugin extensions should install nokogiri
+     Failure/Error: expect(result).to exit_with(0)
+
+       expected command to exit with 0 but got exit code: 1
+
+       stdout: You appear to be running Vagrant outside of the official installers.
+       Note that the installers are what ensure that Vagrant has all required
+       dependencies, and Vagrant assumes that these dependencies exist. By
+       running outside of the installer environment, Vagrant may not function
+       properly. To remove this warning, install Vagrant using one of the
+       official packages from vagrantup.com.
+       Installing the 'nokogiri' plugin. This can take a few minutes...
+
+
+       stderr: Vagrant failed to properly resolve required dependencies. These
+       errors can commonly be caused by misconfigured plugin installations
+       or transient network issues. The reported error is:
+
+       conflicting dependencies bundler (= 2.0.2) and bundler (= 1.17.2)
+         Activated bundler-1.17.2
+         which does not match conflicting dependency (= 2.0.2)
+
+         Conflicting dependency chains:
+           bundler (= 1.17.2), 1.17.2 activated
+
+         versus:
+           bundler (= 2.0.2)
+
+         Gems matching bundler (= 2.0.2):
+           bundler-2.0.2
+     # ./acceptance/cli/plugin_spec.rb:160:in `block (3 levels) in <top (required)>'
+     # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+     # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  10) provider/virtualbox/provisioner/chef-solo it should behave like provider/provisioner/chef-solo provisions with chef-solo
+      Failure/Error: expect(result).to exit_with(0)
+
+        expected command to exit with 0 but got exit code: 1
+
+        stdout: You appear to be running Vagrant outside of the official installers.
+        Note that the installers are what ensure that Vagrant has all required
+        dependencies, and Vagrant assumes that these dependencies exist. By
+        running outside of the installer environment, Vagrant may not function
+        properly. To remove this warning, install Vagrant using one of the
+        official packages from vagrantup.com.
+        Bringing machine 'default' up with 'virtualbox' provider...
+        ==> default: Importing base box 'box'...
+        [KProgress: 10%[KProgress: 20%[KProgress: 40%[KProgress: 60%[KProgress: 70%[KProgress: 80%[KProgress: 90%[K==> default: Matching MAC address for NAT networking...
+        ==> default: Setting the name of the VM: work_default_1576032285448_86287
+        ==> default: Auto-generating node name for Chef...
+        Vagrant is currently configured to create VirtualBox synced folders with
+        the `SharedFoldersEnableSymlinksCreate` option enabled. If the Vagrant
+        guest is not trusted, you may want to disable this option. For more
+        information on this option, please refer to the VirtualBox manual:
+
+          https://www.virtualbox.org/manual/ch04.html#sharedfolders
+
+        This option can be disabled globally with an environment variable:
+
+          VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
+
+        or on a per folder basis within the Vagrantfile:
+
+          config.vm.synced_folder '/host/path', '/guest/path', SharedFoldersEnableSymlinksCreate: false
+        ==> default: Clearing any previously set network interfaces...
+        ==> default: Preparing network interfaces based on configuration...
+            default: Adapter 1: nat
+        ==> default: Forwarding ports...
+            default: 22 (guest) => 2222 (host) (adapter 1)
+        ==> default: Guest provider 'virtualbox' does not support the disk feature, and will not use the disk configuration defined.
+        ==> default: Booting VM...
+        ==> default: Waiting for machine to boot. This may take a few minutes...
+            default: SSH address: 127.0.0.1:2222
+            default: SSH username: vagrant
+            default: SSH auth method: private key
+            default: 
+            default: Vagrant insecure key detected. Vagrant will automatically replace
+            default: this with a newly generated keypair for better security.
+            default: 
+            default: Inserting generated public key within guest...
+            default: Removing insecure key from the guest if it's present...
+            default: Key inserted! Disconnecting and reconnecting using new SSH key...
+        ==> default: Machine booted and ready!
+        ==> default: Checking for guest additions in VM...
+        ==> default: Mounting shared folders...
+            default: /vagrant => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-jtgsg0/work
+            default: /tmp/vagrant-chef/3d5b51216fead1006f0b4107d08da772/roles => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-jtgsg0/work/basic-roles/roles
+            default: /tmp/vagrant-chef/b63ae70a1d7815fe4d83b7d8c275b0de/cookbooks => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-jtgsg0/work/basic/cookbooks
+            default: /tmp/vagrant-chef/4b6da70df92ca0fe428ed0fa198d2bf7/cookbooks => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-jtgsg0/work/basic-roles/cookbooks
+        ==> default: Running provisioner: chef_solo...
+            default: Installing Chef (latest)...
+        ==> default: Generating chef JSON and uploading...
+        ==> default: Running chef-solo...
+        ==> default: Chef Infra Client cannot execute without accepting the license
+
+
+        stderr: Chef never successfully completed! Any errors should be visible in the
+        output above. Please fix your recipes so that they properly complete.
+      Shared Example Group: "provider/provisioner/chef-solo" called from ./lib/vagrant-spec/acceptance/runner.rb:68
+      # ./lib/vagrant-spec/acceptance/rspec/context.rb:59:in `assert_execute'
+      # ./acceptance/provisioner/chef_solo_spec.rb:13:in `block (2 levels) in <top (required)>'
+      # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+      # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  11) provider/virtualbox/provisioner/puppet it should behave like provider/provisioner/puppet provisions with puppet
+      Failure/Error: expect(result).to exit_with(0)
+
+        expected command to exit with 0 but got exit code: 1
+
+        stdout: You appear to be running Vagrant outside of the official installers.
+        Note that the installers are what ensure that Vagrant has all required
+        dependencies, and Vagrant assumes that these dependencies exist. By
+        running outside of the installer environment, Vagrant may not function
+        properly. To remove this warning, install Vagrant using one of the
+        official packages from vagrantup.com.
+        Bringing machine 'default' up with 'virtualbox' provider...
+        ==> default: Importing base box 'box'...
+        [KProgress: 20%[KProgress: 40%[KProgress: 60%[KProgress: 70%[KProgress: 80%[KProgress: 90%[K==> default: Matching MAC address for NAT networking...
+        ==> default: Setting the name of the VM: work_default_1576032521852_42563
+        Vagrant is currently configured to create VirtualBox synced folders with
+        the `SharedFoldersEnableSymlinksCreate` option enabled. If the Vagrant
+        guest is not trusted, you may want to disable this option. For more
+        information on this option, please refer to the VirtualBox manual:
+
+          https://www.virtualbox.org/manual/ch04.html#sharedfolders
+
+        This option can be disabled globally with an environment variable:
+
+          VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
+
+        or on a per folder basis within the Vagrantfile:
+
+          config.vm.synced_folder '/host/path', '/guest/path', SharedFoldersEnableSymlinksCreate: false
+        ==> default: Clearing any previously set network interfaces...
+        ==> default: Preparing network interfaces based on configuration...
+            default: Adapter 1: nat
+        ==> default: Forwarding ports...
+            default: 22 (guest) => 2222 (host) (adapter 1)
+        ==> default: Guest provider 'virtualbox' does not support the disk feature, and will not use the disk configuration defined.
+        ==> default: Booting VM...
+        ==> default: Waiting for machine to boot. This may take a few minutes...
+            default: SSH address: 127.0.0.1:2222
+            default: SSH username: vagrant
+            default: SSH auth method: private key
+            default: 
+            default: Vagrant insecure key detected. Vagrant will automatically replace
+            default: this with a newly generated keypair for better security.
+            default: 
+            default: Inserting generated public key within guest...
+            default: Removing insecure key from the guest if it's present...
+            default: Key inserted! Disconnecting and reconnecting using new SSH key...
+        ==> default: Machine booted and ready!
+        ==> default: Checking for guest additions in VM...
+        ==> default: Mounting shared folders...
+            default: /vagrant => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-1duw3x7/work
+            default: /tmp/vagrant-puppet/modules-8272008ddc7eb482896ac82ff5495ef4 => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-1duw3x7/work/basic-modules/modules
+            default: /tmp/vagrant-puppet/manifests-a11d1078b1b1f2e3bdea27312f6ba513 => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-1duw3x7/work/manifests
+            default: /tmp/vagrant-puppet/manifests-9d2fe6e16c34c822cbd7a47c11a93fd8 => /private/var/folders/d_/29dvwgv93x5gq4xr4638rcvm0000gn/T/d20191210-823-1duw3x7/work/basic-modules/manifests
+        ==> default: Running provisioner: puppet...
+
+
+        stderr: The `puppet` binary appears not to be in the PATH of the guest. This
+        could be because the PATH is not properly setup or perhaps Puppet is not
+        installed on this guest. Puppet provisioning can not continue without
+        Puppet properly installed.
+      Shared Example Group: "provider/provisioner/puppet" called from ./lib/vagrant-spec/acceptance/runner.rb:68
+      # ./lib/vagrant-spec/acceptance/rspec/context.rb:59:in `assert_execute'
+      # ./acceptance/provisioner/puppet_spec.rb:13:in `block (2 levels) in <top (required)>'
+      # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+      # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+  12) provider/virtualbox/synced_folder/nfs it should behave like provider/synced_folder/nfs properly configures NFS
+      Failure/Error: expect(result).to exit_with(0)
+
+        expected command to exit with 0 but got exit code: 1
+
+        stdout: You appear to be running Vagrant outside of the official installers.
+        Note that the installers are what ensure that Vagrant has all required
+        dependencies, and Vagrant assumes that these dependencies exist. By
+        running outside of the installer environment, Vagrant may not function
+        properly. To remove this warning, install Vagrant using one of the
+        official packages from vagrantup.com.
+        Bringing machine 'default' up with 'virtualbox' provider...
+        ==> default: Importing base box 'box'...
+        [KProgress: 10%[KProgress: 20%[KProgress: 40%[KProgress: 60%[KProgress: 80%[KProgress: 90%[K==> default: Matching MAC address for NAT networking...
+        ==> default: Setting the name of the VM: work_default_1576032644318_88625
+        ==> default: Clearing any previously set network interfaces...
+        ==> default: Preparing network interfaces based on configuration...
+            default: Adapter 1: nat
+            default: Adapter 2: hostonly
+        ==> default: Forwarding ports...
+            default: 22 (guest) => 2222 (host) (adapter 1)
+        ==> default: Guest provider 'virtualbox' does not support the disk feature, and will not use the disk configuration defined.
+        ==> default: Booting VM...
+        ==> default: Waiting for machine to boot. This may take a few minutes...
+            default: SSH address: 127.0.0.1:2222
+            default: SSH username: vagrant
+            default: SSH auth method: private key
+            default: 
+            default: Vagrant insecure key detected. Vagrant will automatically replace
+            default: this with a newly generated keypair for better security.
+            default: 
+            default: Inserting generated public key within guest...
+            default: Removing insecure key from the guest if it's present...
+            default: Key inserted! Disconnecting and reconnecting using new SSH key...
+        ==> default: Machine booted and ready!
+        ==> default: Checking for guest additions in VM...
+        ==> default: Configuring and enabling network interfaces...
+
+
+        stderr: NFS requires a host-only network to be created.
+        Please add a host-only network to the machine (with either DHCP or a
+        static IP) for NFS to work.
+      Shared Example Group: "provider/synced_folder/nfs" called from ./lib/vagrant-spec/acceptance/runner.rb:68
+      # ./lib/vagrant-spec/acceptance/rspec/context.rb:59:in `assert_execute'
+      # ./acceptance/synced_folder/nfs_spec.rb:12:in `block (2 levels) in <top (required)>'
+      # ./lib/vagrant-spec/acceptance/runner.rb:49:in `run'
+      # ./lib/vagrant-spec/cli.rb:32:in `test'
+
+5 deprecation warnings total
+
+Finished in 25 minutes 30 seconds (files took 0.33271 seconds to load)
+47 examples, 12 failures
+
+Failed examples:
+
+rspec ./acceptance/cli/plugin_spec.rb:14 # vagrant CLI: plugin has certain behavior with a plugin installed
+rspec ./acceptance/cli/plugin_spec.rb:43 # vagrant CLI: plugin can install and uninstall multiple plugins
+rspec ./acceptance/cli/plugin_spec.rb:85 # vagrant CLI: plugin plugin install succeeds with a remote plugin
+rspec ./acceptance/cli/plugin_spec.rb:93 # vagrant CLI: plugin plugin install can install a specific version of a plugin
+rspec ./acceptance/cli/plugin_spec.rb:103 # vagrant CLI: plugin plugin update can update a plugin
+rspec ./acceptance/cli/plugin_spec.rb:137 # vagrant CLI: plugin plugin license fails with a license file that doesn't exist
+rspec ./acceptance/cli/plugin_spec.rb:142 # vagrant CLI: plugin plugin license fails with a plugin that isn't installed
+rspec ./acceptance/cli/plugin_spec.rb:147 # vagrant CLI: plugin plugin license succeeds with a valid gem and license
+rspec ./acceptance/cli/plugin_spec.rb:158 # vagrant CLI: plugin plugin extensions should install nokogiri
+rspec ./lib/vagrant-spec/acceptance/runner.rb[1:1:1] # provider/virtualbox/provisioner/chef-solo it should behave like provider/provisioner/chef-solo provisions with chef-solo
+rspec ./lib/vagrant-spec/acceptance/runner.rb[1:1:1] # provider/virtualbox/provisioner/puppet it should behave like provider/provisioner/puppet provisions with puppet
+rspec ./lib/vagrant-spec/acceptance/runner.rb[1:1:1] # provider/virtualbox/synced_folder/nfs it should behave like provider/synced_folder/nfs properly configures NFS
+
